@@ -5,16 +5,16 @@
 
 <h3>Usage</h3>
 <p>You can use one use one release from the "releases" directory or you can compile the program for the Java source code.</p>
-<p>On calling the program you <must>/[can] add the following arguments:</p>
-<p><HTMLFilePath> [option1] [option1 argument] ...</p>
+<p>On calling the program you &lt;must&gt;/[can] add the following arguments:</p>
+<p>&lt;HTMLFilePath&gt; [option1] [option1 argument] ...</p>
 <p>Options:</p>
 <ul>
   <li>-h or --help : displays the help.</li>
-  <li>--css <CSSFilePath> : specifies an aditional CSS file to be applied.</li>
-  <li>--charset <CharsetName> : sets the charset to read the files (default UTF8).</li>
-  <li>--config <XMLConfigFilePath> : sets a custom configuration absolute file path (including file name). Default path is the JAR's folder.</li>
+  <li>--css &lt;CSSFilePath&gt; : specifies an aditional CSS file to be applied.</li>
+  <li>--charset &lt;CharsetName&gt; : sets the charset to read the files (default UTF8).</li>
+  <li>--config &lt;XMLConfigFilePath&gt; : sets a custom configuration absolute file path (including file name). Default path is the JAR's folder.</li>
   <li>--init : initializes the configuration XML file.</li>
-  <li>--to-pdf <PDFFilePath>: generates a PDF document to be stored in the specified path.</li>
+  <li>--to-pdf &lt;PDFFilePath&gt; : generates a PDF document to be stored in the specified path.</li>
   <li>--error-log : enables the error logging functionality. The program will generate one .log file with the same path of the HTML file.</li>
 </ul>
 <p>Supported Charsets: UTF8, UTF16, ASCII and 8859."</p>
