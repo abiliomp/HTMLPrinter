@@ -13,7 +13,7 @@
   <li>--css <CSSFilePath> : specifies an aditional CSS file to be applied.</li>
   <li>--charset <CharsetName> : sets the charset to read the files (default UTF8).</li>
   <li>--config <XMLConfigFilePath> : sets a custom configuration absolute file path (including file name). Default path is the JAR's folder.</li>
-  <li>-init : initializes the configuration XML file.</li>
+  <li>--init : initializes the configuration XML file.</li>
   <li>--to-pdf <PDFFilePath>: generates a PDF document to be stored in the specified path.</li>
   <li>--error-log : enables the error logging functionality. The program will generate one .log file with the same path of the HTML file.</li>
 </ul>
