@@ -1,6 +1,6 @@
 <h1>HTMLPrinter</h1>
 <p>A simple and easy to use program to print HTML content directly into a preconfigured printer. The aim is to provide a flexible, reliable and precise printing solution to web-based systems.</p>
-<p>I hope you find it useful. Any feedback will be great to receive.</p>
+<p>I hope you find it useful. Any feedback will be appreciated.</p>
 <em>Abilio</em>
 
 <h3>Usage</h3>
