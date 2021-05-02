@@ -64,4 +64,6 @@
             </plugin>
         </plugins>
     </build>
+    <name>HTML Printer</name>
+    <description>A program to print HTML contents directly into a preconfigured printer.</description>
 </project>

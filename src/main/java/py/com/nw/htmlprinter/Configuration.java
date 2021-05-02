@@ -1,11 +1,29 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2021 Networkers SRL.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package py.com.nw.htmlprinter;
 
-import java.awt.print.PageFormat;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -23,43 +41,77 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author abili
+ * <p>
+ * This is the configuration class for the HTMLPrinter program. It holds the basic parameters to setup the printing environment.
+ * <p>
+ * It is XML serializable and implements the basic file I/O operations out of the box.
+ * <p>
+ * There is only one static instance through which the parameters can be retrieved.
+ * <p>
+ * @author abiliomp
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
     
+    /**
+     * A constant that holds the default configuration file name.
+     */
     @XmlTransient
     private static final String FILENAME = "HTMLPrinterConfig.xml";
     
-    @XmlTransient
-    private static String CustomFilePath = null;
-    
-    
+    /**
+     * Constant that stores the convertion rate from user space to milimeters.
+     */
     @XmlTransient
     private static final double DOTS_PER_MM = 25.4/72.0;
     
+    /**
+     * The custom file path, used in case it is specified at runtime.
+     */
+    @XmlTransient
+    private static String CustomFilePath = null;
+    
+    /**
+     * The configuration static instance that stores the retrieved config parameters.
+     */
     @XmlTransient
     private static Configuration Config;
     
-    @XmlTransient
-    private PageFormat defaultPageFormat;
-    
+    /**
+     * The printer's name or resource path.
+     * XML serialized parameter
+     */
     private String printerName = "NullPrinter";
+    
+    /**
+     * The paper width.
+     * XML serialized parameter
+     */
     private double paperWidth = 210.0;
+    
+    /**
+     * The paper height.
+     * XML serialized parameter
+     */
+    
     private double paperHeight = 297.0;
+    
+    /**
+     * The page printing orientation.
+     * XML serialized parameter
+     * The values are defined in the enumeration {@link PageOrientation}
+     */
     private PageOrientation pageOrientation = PageOrientation.PORTRAIT;
     
     ////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Private constructor. Only one static instance is needed / allowed.
+     */
     private Configuration() {}
 
     ////////////////////////////////////////////////////////////////////////////
-
-    public static PageFormat GetDefaultPageFormat() {
-        return Config.defaultPageFormat;
-    }
 
     public static String GetPrinterName() {
         return Config.printerName;
@@ -87,11 +139,19 @@ public class Configuration {
         Config.printerName = printerName;
     }
     
-    public static void SetPageOrientationd(PageOrientation pageOrientation) {
+    /**
+     * Sets the page orientation.
+     * @param pageOrientation enum value from {@link PageOrientation}
+     */
+    public static void SetPageOrientation(PageOrientation pageOrientation) {
         Config.pageOrientation = pageOrientation;
     }
     
-    public static void SetCustomFullFilePath(String fullPath){
+    /**
+     * Sets a custom file path for the XML configuration file.
+     * @param fullPath A string representing the full file path (filename and extension included).
+     */
+    public static void SetCustomFilePath(String fullPath){
         CustomFilePath = fullPath;
     }
     
