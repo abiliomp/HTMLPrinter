@@ -4,7 +4,7 @@
 <em>Abilio</em>
 
 <h3>Usage</h3>
-<p>You can use one use one release from the "releases" directory or you can compile the program for the Java source code.</p>
+<p>You can use one use one release from the "Releases" section or you can compile the program for the Java source code.</p>
 <p>On calling the program you &lt;must&gt;/[can] add the following arguments:</p>
 <p>&lt;HTMLFilePath&gt; [option1] [option1 argument] ...</p>
 <p>Options:</p>
