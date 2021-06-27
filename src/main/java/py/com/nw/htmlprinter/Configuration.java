@@ -29,8 +29,11 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -78,74 +81,74 @@ public class Configuration {
     @XmlTransient
     private static Configuration Config;
     
-    /**
-     * The printer's name or resource path.
-     * XML serialized parameter
-     */
-    private String printerName = "NullPrinter";
+    /*
+    * Stores the configuration of each individual printer configured on this instance.
+    * The key value is a string to be specified at the configuration file.
+    */
+    public HashMap<String, PrinterConfiguration> printers;    
     
     /**
-     * The paper width.
+     * Specifies whenever to run the deamon service or not.
+     * When ran as a service, the program expects to receive printing request from a websocket connection.
      * XML serialized parameter
      */
-    private double paperWidth = 210.0;
+    private boolean runAsService = false;
+    
     
     /**
-     * The paper height.
+     * The TCP port to listen for Websocket connection. Only valid when service deamon is enabled.
      * XML serialized parameter
      */
-    
-    private double paperHeight = 297.0;
-    
-    /**
-     * The page printing orientation.
-     * XML serialized parameter
-     * The values are defined in the enumeration {@link PageOrientation}
-     */
-    private PageOrientation pageOrientation = PageOrientation.PORTRAIT;
+    private int webSocketPort = 3333;
     
     ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Private constructor. Only one static instance is needed / allowed.
      */
-    private Configuration() {}
+    private Configuration() {
+        printers = new HashMap<>();
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
-    public static String GetPrinterName() {
-        return Config.printerName;
-    }
-
-    public static double GetPaperWidth() {
-        return Config.paperWidth;
-    }
-
-    public static double GetPaperHeight() {
-        return Config.paperHeight;
-    }
-
-    public static PageOrientation GetPageOrientation() {
-        return Config.pageOrientation;
-    }
+    
     
     public static String GetCustomFullFilePath(){
         return CustomFilePath;
     }
+
+    public static boolean IsRunAsService() {
+        return Config.runAsService;
+    }
+
+    public static int GetWebSocketPort() {
+        return Config.webSocketPort;
+    }
+    
+    public static PrinterConfiguration GetPrinter(String printerId){
+        return Config.printers.get(printerId);
+    }
+    
+    public static PrinterConfiguration GetDefaultPrinter(){
+        if(Config.printers.isEmpty()){
+            return null;
+        }
+        else if(Config.printers.size() == 1){
+            return Config.printers.values().iterator().next();
+        }
+        else{
+            List<PrinterConfiguration> lpc = Config.printers.values().stream().filter(pc -> pc.isDefault()).collect(Collectors.toList());
+            if(lpc != null && lpc.size() > 0){
+                return lpc.get(0);
+            }
+            else{
+                return Config.printers.values().iterator().next();
+            }
+        }
+    }
     
     ////////////////////////////////////////////////////////////////////////////
-    
-    public static void SetPrinterName(String printerName) {
-        Config.printerName = printerName;
-    }
-    
-    /**
-     * Sets the page orientation.
-     * @param pageOrientation enum value from {@link PageOrientation}
-     */
-    public static void SetPageOrientation(PageOrientation pageOrientation) {
-        Config.pageOrientation = pageOrientation;
-    }
     
     /**
      * Sets a custom file path for the XML configuration file.
@@ -153,6 +156,18 @@ public class Configuration {
      */
     public static void SetCustomFilePath(String fullPath){
         CustomFilePath = fullPath;
+    }
+
+    public static void SetRunAsService(boolean runAsService) {
+        Config.runAsService = runAsService;
+    }
+
+    public static void SetWebSocketPort(int webSocketPort) {
+        Config.webSocketPort = webSocketPort;
+    }
+    
+    public static void AddPrinter(String printerId, PrinterConfiguration pc){
+        Config.printers.put(printerId, pc);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -165,7 +180,9 @@ public class Configuration {
     
     public static void Init() throws Exception{
         Config = new Configuration();
-        SaveConfiguration();        
+        PrinterConfiguration pc = new PrinterConfiguration("ExamplePrinter");
+        Config.printers.put("ExamplePrinter", pc);
+        SaveConfiguration();      
     }
     
     public static void SaveConfiguration() throws JAXBException, Exception{
@@ -206,7 +223,7 @@ public class Configuration {
         }
     }
     
-    private static File GetCurrentDir() throws URISyntaxException, UnsupportedEncodingException{        
+    public static File GetCurrentDir() throws URISyntaxException, UnsupportedEncodingException{        
         File file = new File(HTMLPrinter.class.getProtectionDomain().getCodeSource().getLocation().toURI());       
         File parent = file.getParentFile();
         if(parent.isDirectory()){
