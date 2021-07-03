@@ -142,7 +142,7 @@ public class HTMLPrinter {
             System.out.println("\t-h or --help : displays this help.");
             System.out.println("\t--init : initializes the configuration XML file.");
             System.out.println("\t--config <XMLConfigFilePath> : sets a custom configuration absolute file path (including file name). Default path is the JAR's folder.");            
-            System.out.println("\t-p or --printer <PrinterName> : specifies the printer to be used. The printer must be within the configuration file.");
+            System.out.println("\t-p or --printer <PrinterName> : specifies the printer id to be used. The printer must be within the configuration file.");
             System.out.println("\t--css <CSSFilePath> : specifies an aditional CSS file to be applied.");
             System.out.println("\t--charset <CharsetName> : sets the charset to read the files (default UTF8).");
             System.out.println("\t--to-pdf <PDFFilePath> : generates a PDF document to be stored in the specified path.");

@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -36,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 public class PrintRequestMessage {
     
     private String printerId = null;
-    private Charset charset = StandardCharsets.UTF_8;
+    private String charset = "UTF-8";
     private String html;
 
     public PrintRequestMessage(){}
@@ -54,15 +53,15 @@ public class PrintRequestMessage {
     }
 
     public Charset getCharset() {
-        return charset;
+        return CharsetHelper.parse(charset);
     }
 
     public void setCharset(Charset charset) {
-        this.charset = charset;
+        this.charset = charset.name();
     }
     
     public void setCharset(String charsetName) {
-        this.charset = CharsetHelper.parse(charsetName);
+        this.charset = charsetName;
     }
 
     public String getHtml() {

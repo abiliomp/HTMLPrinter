@@ -67,37 +67,48 @@ public class PrintRequestHandler implements Runnable{
                 System.out.println("[PrintServer] PrintRequest decoded.");
                 // Check the printer config
                 PrinterConfiguration printerConfig;
-                if(pr.getPrinterId() != null)
+                if(pr.getPrinterId() != null){
+                    System.out.println("[PrintServer] Checking for " + pr.getPrinterId() + " printer ID configuration...");
                     printerConfig = Configuration.GetPrinter(pr.getPrinterId());
-                else
+                }
+                else{
+                    System.out.println("[PrintServer] Checking default printer configuration...");
                     printerConfig = Configuration.GetDefaultPrinter();
+                }
                 if(printerConfig == null){
+                    System.err.println("[PrintServer] The printer was not found in the configuration of this service.");
                     prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_ERROR, PrintResponseMessage.REQUEST_STATUS_REJECTED, "The printer was not found in the configuration of this service.");
                     conn.send(prm.toJson());
                 }
                 else{
                     // Printer config found. Check the printer's status
+                    System.out.println("[PrintServer] Configuration found. Printer name: " + printerConfig.getPrinterName());
                     PrintService printerService = PrintServiceHelper.find(printerConfig.getPrinterName());
                     if(printerService == null){
+                        System.err.println("[PrintServer] Printer not found. Check the configuration and server setup.");
                         prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_ERROR, PrintResponseMessage.REQUEST_STATUS_REJECTED, "Printer not found. Check the configuration and server setup.");
                         conn.send(prm.toJson());       
                     }
                     else{
                         PrinterState prnState = (PrinterState) printerService.getAttribute(PrinterState.class);
                         if(prnState == PrinterState.STOPPED){
+                            System.err.println("[PrintServer] Printer is not available.");
                             prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_ERROR, PrintResponseMessage.REQUEST_STATUS_REJECTED, "Printer is not available.");
                             conn.send(prm.toJson());
                         }
                         if(prnState == PrinterState.PROCESSING){
+                            System.err.println("[PrintServer] Printer is processing previous jobs.");
                             prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_BUSY, PrintResponseMessage.REQUEST_STATUS_REJECTED, "Printer is processing previous jobs.");
                             conn.send(prm.toJson());
                         }
                         else if((PrinterIsAcceptingJobs) (printerService.getAttribute(PrinterIsAcceptingJobs.class)) == PrinterIsAcceptingJobs.NOT_ACCEPTING_JOBS){
+                                System.err.println("[PrintServer] Printer is not accepting new jobs.");
                                 prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_ERROR, PrintResponseMessage.REQUEST_STATUS_REJECTED, "Printer is not accepting new jobs.");
                                 conn.send(prm.toJson());
                         }
                         else{
                             // Printer is idle and ready to print //////////////
+                            System.out.println("[PrintServer] OK! Request received and printer available.");
                             prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_FREE, PrintResponseMessage.REQUEST_STATUS_RECEIVED, "Request received and printer available.");
                             conn.send(prm.toJson());
                             // Check the charset

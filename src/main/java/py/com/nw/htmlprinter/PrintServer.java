@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 abili.
+ * Copyright 2021 Networkers SRL.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,11 @@
  */
 package py.com.nw.htmlprinter;
 
-import com.google.gson.JsonSyntaxException;
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.kernel.events.PdfDocumentEvent;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintException;
-import javax.print.PrintService;
-import javax.print.SimpleDoc;
-import javax.print.attribute.standard.PrinterIsAcceptingJobs;
-import javax.print.attribute.standard.PrinterState;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.printing.PDFPageable;
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
@@ -65,7 +36,7 @@ import org.java_websocket.server.WebSocketServer;
 
 /**
  *
- * @author abili
+ * @author abiliomp
  */
 public class PrintServer extends WebSocketServer {
     public PrintServer(int port) throws UnknownHostException {
@@ -90,11 +61,7 @@ public class PrintServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        /* Free any reserver resource */
-        
-        /*broadcast(conn + " has left the room!");
-        System.out.println(conn + " has left the room!"); */
-        
+        /* Nothing to do */
     }
 
     @Override
@@ -102,19 +69,25 @@ public class PrintServer extends WebSocketServer {
         PrintRequestHandler prh = new PrintRequestHandler(conn, message);
         Thread t = new Thread(prh);
         t.setName("PrintService-" + conn.getResourceDescriptor());
+        t.start();
     }
 
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
-      broadcast(message.array());
-      System.out.println(conn + ": " + message);
+        PrintRequestHandler prh = new PrintRequestHandler(conn, StandardCharsets.UTF_8.decode(message).toString());
+        Thread t = new Thread(prh);
+        t.setName("PrintService-" + conn.getResourceDescriptor());
+        t.start();
     }
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
+        System.err.println("[PrinterServer ERR] Error ocurred: " + ex.getLocalizedMessage());
+        System.err.println("[PrinterServer ERR] Stack trace: ");
         ex.printStackTrace();
         if (conn != null) {
-            // so me errors like port binding failed may not be assignable to a specific websocket
+            PrintResponseMessage prm = new PrintResponseMessage(PrintResponseMessage.PRINTER_STATUS_ERROR, PrintResponseMessage.REQUEST_STATUS_REJECTED, "Error in the conection: " + ex.getLocalizedMessage());
+            conn.send(prm.toJson()); 
         }
     }
 

@@ -35,7 +35,7 @@ public class CharsetHelper {
     private CharsetHelper(){}
     
     public static Charset parse(String charsetName){
-        if(charsetName.compareTo("UTF8") == 0){
+        if(charsetName.compareTo("UTF8") == 0 || charsetName.compareTo("UTF-8") == 0 || charsetName.compareTo("UTF_8") == 0){
             return StandardCharsets.UTF_8;
         }
         else if(charsetName.compareTo("ASCII") == 0){
@@ -44,7 +44,7 @@ public class CharsetHelper {
         else if(charsetName.compareTo("8859") == 0){
             return StandardCharsets.ISO_8859_1;
         }
-        else if(charsetName.compareTo("UTF16") == 0){
+        else if(charsetName.compareTo("UTF16") == 0 || charsetName.compareTo("UTF-16") == 0 || charsetName.compareTo("UTF_16") == 0){
             return StandardCharsets.UTF_16;
         }
         else{
