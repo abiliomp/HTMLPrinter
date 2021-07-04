@@ -122,6 +122,7 @@ public class PrintRequestHandler implements Runnable{
                             PageOrientationsEventHandler eventHandler = new PageOrientationsEventHandler();
                             pdfDoc.addEventHandler(PdfDocumentEvent.START_PAGE, eventHandler);
                             PageSize pz = new PageSize((float) Configuration.mmToDots(printerConfig.getPaperWidth()), (float) Configuration.mmToDots(printerConfig.getPaperHeight()));
+                            
                             switch(printerConfig.getPageOrientation()){
                                 case LANDSCAPE:
                                     eventHandler.setOrientation(PageOrientationsEventHandler.LANDSCAPE);
@@ -138,6 +139,7 @@ public class PrintRequestHandler implements Runnable{
                                     eventHandler.setOrientation(PageOrientationsEventHandler.PORTRAIT);
                                     break;
                             }
+                            pz.applyMargins(printerConfig.getMarginTop(), printerConfig.getMarginRight(), printerConfig.getMarginBottom(), printerConfig.getMarginLeft(), false);
                             pdfDoc.setDefaultPageSize(pz);
                             ConverterProperties convP = new ConverterProperties();
                             convP.setCharset(charset);

@@ -56,6 +56,39 @@ public class PrinterConfiguration {
     private double paperHeight = 297.0;
     
     /**
+     * Left margin value. Allows negative values.
+     * Default value 0.
+     * XML serialized parameter
+     */
+    
+    private float marginLeft = 0;
+    
+    
+    /**
+     * Right margin value. Allows negative values.
+     * Default value 0.
+     * XML serialized parameter
+     */
+    
+    private float marginRight = 0;
+    
+    /**
+     * Top margin value. Allows negative values.
+     * Default value 0.
+     * XML serialized parameter
+     */
+    
+    private float marginTop = 0;
+    
+    /**
+     * Bottom margin value. Allows negative values.
+     * Default value 0.
+     * XML serialized parameter
+     */
+    
+    private float marginBottom = 0;
+    
+    /**
      * The page printing orientation. Default PORTRAIT
      * XML serialized parameter
      * The values are defined in the enumeration {@link PageOrientation}
@@ -101,6 +134,22 @@ public class PrinterConfiguration {
     public boolean isDefault() {
         return isDefault;
     }
+
+    public float getMarginLeft() {
+        return marginLeft;
+    }
+
+    public float getMarginRight() {
+        return marginRight;
+    }
+
+    public float getMarginTop() {
+        return marginTop;
+    }
+
+    public float getMarginBottom() {
+        return marginBottom;
+    }
     
     // Setters /////////////////////////////////////////////////////////////////
     
@@ -130,6 +179,22 @@ public class PrinterConfiguration {
     
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public void setMarginLeft(float marginLeft) {
+        this.marginLeft = marginLeft;
+    }
+
+    public void setMarginRight(float marginRight) {
+        this.marginRight = marginRight;
+    }
+
+    public void setMarginTop(float marginTop) {
+        this.marginTop = marginTop;
+    }
+
+    public void setMarginBottom(float marginBottom) {
+        this.marginBottom = marginBottom;
     }
     
 }
