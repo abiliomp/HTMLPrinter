@@ -61,7 +61,7 @@ public class PrintServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        /* Nothing to do */
+        System.out.println("[PrintServer] Connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress() + " has been closed.");
     }
 
     @Override
